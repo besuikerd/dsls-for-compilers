@@ -22,7 +22,7 @@
   stroke: #10579E;
   stroke-linecap: round;
   stroke-width: 0.0%;
-  animation: moveFrames 4s, rotateFrames 10s 5s infinite;
+  animation: moveFrames 4s 1;
 }
 @keyframes appearFrames {
   0%   {opacity: 0.0;}
@@ -46,7 +46,7 @@
   animation-name: rotate360;
   animation-delay: 10s;
   animation-duration: 10s;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
   animation-timing-function: linear;
 }
 </style>
