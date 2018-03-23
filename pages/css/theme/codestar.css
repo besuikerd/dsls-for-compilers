@@ -377,6 +377,14 @@ body {
   animation-timing-function: ease-out;
  }
 
+.logo-corner-static {
+  position: absolute;
+  width:  10em;
+  height: 2.032em;
+  top: 0;
+  right: -2.5em;
+}
+
 @keyframes fade-out {
   0%   {opacity: 1.0; display: block;}
   100% {opacity: 0.0; display: none;}

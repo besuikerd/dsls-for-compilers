@@ -116,10 +116,9 @@ def build_file(file):
 
         pandoc_command = [
             "pandoc", file,
-            "-t", "html5",
+            "-t", "html5+smart",
             "--template", "templates/page.html",
             "--standalone",
-            "--smart",
             "--mathjax",
             "--section-divs",
             "--no-highlight",
