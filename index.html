@@ -161,19 +161,64 @@ not (not true))</code></pre>
 <section id="section" class="level2">
 <h2></h2>
 <ul>
-<li>Rule: <code>Term =&gt; Term</code></li>
+<li>Transformation: <code>Term =&gt; Term</code></li>
 </ul>
-<pre><code>  eval : Add(e1, e2) -&gt; &lt;add&gt; (i, j)  
+<pre><code>  eval : Add(e1, e2) -&gt; Int(sum)  
     where
       Int(i) := &lt;eval&gt; e1
-    ; Int(j) := &lt;eval&gt; e2</code></pre>
+    ; Int(j) := &lt;eval&gt; e2
+    ; sum    := &lt;add&gt; (i, j)</code></pre>
 <ul>
-<li>Strategy: <code>(Seq[Rule], Seq[Term]) =&gt; Rule</code></li>
+<li>In scala</li>
+</ul>
+<pre class="scala"><code>  def eval: PartialFunction[Exp, Value] = {
+    case Add(e1, e2) =&gt;
+      val Int(i) = eval(e1)
+      val Int(j) = eval(e2)
+      Int(i + j)
+  } </code></pre>
+</section>
+<section id="section-1" class="level2">
+<h2></h2>
+<ul>
+<li>Strategy: <code>(Seq[Strategy], Seq[Term]) =&gt; Transformation</code></li>
 </ul>
 <pre><code>  fold-left(do-fold | acc): [] -&gt; acc
   fold-left(do-fold | acc): [x | xs] -&gt; &lt;fold-left(do-fold | acc&#39;)&gt; xs 
     where
       acc&#39; := &lt;do-fold&gt; (acc, x)  </code></pre>
+<pre><code>  &lt;fold-left(add | 0)&gt; [1,2,3,4]</code></pre>
+<ul>
+<li>In scala</li>
+</ul>
+<pre class="scala"><code>  def foldLeft[A,B](doFold: (B, A) =&gt; B)(acc: B): Seq[A] =&gt; B = {
+    case Seq() =&gt; acc
+    case x +: xs =&gt; foldLeft(doFold)(doFold(acc,x))(xs)
+  }</code></pre>
+</section>
+<section id="traversals" class="level2">
+<h2>Traversals</h2>
+<ul>
+<li><code>bottomup</code></li>
+<li><code>topdown</code></li>
+<li><code>alltd</code></li>
+<li><code>try</code></li>
+<li><code>leaves</code></li>
+</ul>
+</section>
+<section id="section-2" class="level2">
+<h2></h2>
+<pre><code>Node(
+  Node(
+    Leaf(1),
+    Leaf(2)
+  ),
+  Node(
+    Leaf(3),
+    Leaf(4)
+  )
+)</code></pre>
+<pre><code>transform = bottomup(try(inc))</code></pre>
 </section>
 <section id="desugaring" class="level2">
 <h2>Desugaring</h2>
@@ -190,14 +235,16 @@ RenderElement.RenderElement2 = [
 <pre><code>RenderElement(&quot;div&quot;, [], [], &quot;div&quot;)
 RenderElement2(&quot;div&quot;, [])</code></pre>
 </section>
-<section id="desugaring-pattern-matching" class="level2">
-<h2>Desugaring (pattern matching)</h2>
-<pre><code>desugar-element: RenderElement2(tag, attributes) -&gt; RenderElement(tag, attributes, [], tag)</code></pre>
+<section id="desugaring-1" class="level2">
+<h2>Desugaring</h2>
+<pre><code>desugar-element: RenderElement2(tag, attributes) -&gt; 
+  RenderElement(tag, attributes, [], tag)</code></pre>
+<pre><code>desugar-all = bottomup(try(desugar-element))</code></pre>
 </section>
 </section>
 <section id="code-generation" class="level1">
 <h1>Code generation</h1>
-<section id="section-1" class="level2">
+<section id="section-3" class="level2">
 <h2></h2>
 <p><code>Source Language =&gt; Target Language</code></p>
 </section>
